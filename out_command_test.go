@@ -63,10 +63,10 @@ var _ = Describe("Out", func() {
 			})
 
 			It("reports specified location's current time(offset: -0400) as the version", func() {
-				// An example of response.Version.Time.String() is
-				// 2019-04-03 14:53:10.951241 -0400 EDT
-				contained := strings.Contains(response.Version.Time.String(), "-0400")
-				Expect(contained).To(BeTrue())
+				_, expectedOffset := now.Zone()
+
+				_, versionOffset := response.Version.Time.Zone()
+				Expect(versionOffset).To(Equal(expectedOffset))
 			})
 		})
 		Context("when a location is not specified", func() {
