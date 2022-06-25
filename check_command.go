@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/concourse/time-resource/lord"
@@ -24,12 +25,19 @@ func (*CheckCommand) Run(request models.CheckRequest) ([]models.Version, error) 
 		currentTime = currentTime.In((*time.Location)(specifiedLocation))
 	}
 
+	interval := request.Source.Interval
+
+	if interval == nil && request.Source.MinInterval != nil && request.Source.MaxInterval != nil {
+		randomInterval := models.Interval(rand.Intn(int(*request.Source.MaxInterval) - int(*request.Source.MinInterval) + int(*request.Source.MinInterval)))
+		interval = &randomInterval
+	}
+
 	tl := lord.TimeLord{
 		PreviousTime: previousTime,
 		Location:     specifiedLocation,
 		Start:        request.Source.Start,
 		Stop:         request.Source.Stop,
-		Interval:     request.Source.Interval,
+		Interval:     interval,
 		Days:         request.Source.Days,
 	}
 

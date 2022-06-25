@@ -41,6 +41,8 @@ type CheckResponse []Version
 type Source struct {
 	InitialVersion bool       `json:"initial_version"`
 	Interval       *Interval  `json:"interval"`
+	MinInterval    *Interval  `json:"min_interval"`
+	MaxInterval    *Interval  `json:"max_interval"`
 	Start          *TimeOfDay `json:"start"`
 	Stop           *TimeOfDay `json:"stop"`
 	Days           []Weekday  `json:"days"`
